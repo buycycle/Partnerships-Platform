@@ -47,33 +47,22 @@ export function HeroBanner() {
 
   return (
     <div className="relative bg-white">
-      {/* Hero Image Container - Fully responsive for all screen sizes */}
-      <div className="w-full">
-        <a 
-          href="https://buycycle.com/en-us" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="block cursor-pointer hover:opacity-95 transition-opacity duration-300"
-          title="Visit buycycle.com"
-        >
-          <div className="relative w-full overflow-hidden bg-gradient-to-r from-blue-50 to-green-50">
-            <img 
-              src={getBannerImage()}
-              alt={getAltText()}
-              className="w-full h-auto object-cover object-center
-                         min-h-[280px] max-h-[350px] 
-                         sm:min-h-[320px] sm:max-h-[400px]
-                         md:min-h-[360px] md:max-h-[450px]
-                         lg:min-h-[400px] lg:max-h-[500px]
-                         xl:min-h-[450px] xl:max-h-[550px]
-                         2xl:min-h-[500px] 2xl:max-h-[600px]
-                         transition-all duration-300"
-            />
-            {/* Subtle overlay for better text readability on wide screens */}
-            <div className="absolute inset-0 bg-black/5 pointer-events-none"></div>
-          </div>
-        </a>
-      </div>
+      {/* Hero Image */}
+      <a 
+        href="https://buycycle.com/en-us" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="block cursor-pointer hover:opacity-95 transition-opacity duration-300"
+        title="Visit buycycle.com"
+      >
+        <img 
+          src={getBannerImage()}
+          alt={getAltText()}
+          className="w-full h-auto object-cover max-h-[300px] sm:max-h-[400px] md:max-h-[500px] lg:max-h-[600px]"
+          loading="eager"
+          decoding="async"
+        />
+      </a>
     </div>
   );
 }
