@@ -1,23 +1,6 @@
-# Buycycle Partnerships Platform
+# Buycycle Video Platform
 
-A Next.js partnerships platform with multi-language support, authentication system, and dynamic content management.
-
-## 🚀 Quick Deploy
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/partnerships-platform)
-
-**Live Demo**: [partnerships-platform.vercel.app](https://partnerships-platform.vercel.app)
-
-## ✨ Features
-
-- 🌍 **Multi-language Support** (English/French)
-- 📱 **Responsive Design** (Mobile & Desktop)
-- 🔐 **Authentication System** (OAuth + Email/Password)
-- 🎯 **Dynamic Hero Banner** (Device & Language Aware)
-- 🛍️ **Marketplace Sections** with brand integration
-- 📲 **App Download Banner** 
-- 🎨 **Modern UI** with Shadcn components
-- ⚡ **Optimized for Vercel** deployment
+A Next.js video platform with complete authentication system based on the contact-form implementation.
 
 ## 🔐 Authentication System
 

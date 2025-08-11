@@ -1,25 +1,60 @@
-# Environment Variables Required
+# Environment Variables Required for Partnerships Platform
 
-## Authentication & API
-- `X_PROXY_AUTHORIZATION` - Buycycle API key for backend authentication
+## 🔑 Critical Variables (Required for basic functionality)
+
+### API Authentication
+- `NEXT_PUBLIC_BUYCYCLE_API_KEY` - Public Buycycle API key
   - **Value**: `WmhamrdVBtXiMHoJLBwQxbJ2gsgjVMSl21TQFrniIEyEl7m0iZKp43HhOUh8IiJS`
+- `X_PROXY_AUTHORIZATION` - Server-side Buycycle API authentication
+  - **Value**: `WmhamrdVBtXiMHoJLBwQxbJ2gsgjVMSl21TQFrniIEyEl7m0iZKp43HhOUh8IiJS`
+- `NEXT_PUBLIC_BUYCYCLE_API_URL` - Buycycle API base URL
+  - **Value**: `https://api.buycycle.com`
+
+### OAuth Configuration
+- `NEXT_PUBLIC_GOOGLE_CLIENT_ID` - Google OAuth client ID
+  - **Value**: `428411144874-5onfg83tcii07qfh8cbtdjj4uuqanun9.apps.googleusercontent.com`
+- `NEXT_PUBLIC_APPLE_CLIENT_ID` - Apple OAuth client ID
+  - **Value**: `com.buycycle.client`
+
+### Domain Configuration
+- `NEXT_PUBLIC_PRODUCTION_DOMAIN` - Your production domain
+- `NEXTAUTH_URL` - Full application URL for authentication
+- `NEXTAUTH_SECRET` - Secret for NextAuth.js (generate secure random string)
+
+## 📊 Optional Variables (For extended functionality)
+
+### Database (if using backend features)
 - `DATABASE_URL` - MySQL database connection string
+- `MYSQL_HOST` - Database host
+- `MYSQL_USER` - Database user
+- `MYSQL_PASSWORD` - Database password
+- `MYSQL_DATABASE` - Database name
+- `MYSQL_PORT` - Database port (default: 3306)
 
-## OAuth (Already configured for sponsorship.buycycle.com)
-- `GOOGLE_CLIENT_ID` - Google OAuth client ID
-- `APPLE_CLIENT_ID` - Apple OAuth client ID
+### Analytics
+- `NEXT_PUBLIC_MIXPANEL_TOKEN` - Mixpanel tracking token
+  - **Value**: `185200908af84f7c2208bef5ab52769e`
 
-## AWS S3 (for video uploads)
-- `AWS_ACCESS_KEY_ID` - AWS access key
-- `AWS_SECRET_ACCESS_KEY` - AWS secret key
-- `AWS_REGION` - AWS region (e.g., eu-central-1)
-- `AWS_S3_BUCKET` - S3 bucket name
+## 🚀 Deployment Notes
 
-## Next.js
-- `NEXTAUTH_SECRET` - Secret for NextAuth.js
-- `NEXTAUTH_URL` - Application URL (https://sponsorship.buycycle.com)
+### For Vercel:
+1. Go to Vercel Dashboard → Your Project → Settings → Environment Variables
+2. Add variables for: **Production**, **Preview**, and **Development**
+3. Variables with `NEXT_PUBLIC_` prefix are available in browser
+4. Private variables are server-side only
 
-## Notes
-- The `X_PROXY_AUTHORIZATION` variable is critical for backend proxy authentication with Buycycle API
-- OAuth is configured for sponsorship.buycycle.com domain only
-- All environment variables should be set in Vercel deployment settings 
+### For Local Development:
+Create `.env.local` file in project root:
+```env
+NEXT_PUBLIC_BUYCYCLE_API_KEY=WmhamrdVBtXiMHoJLBwQxbJ2gsgjVMSl21TQFrniIEyEl7m0iZKp43HhOUh8IiJS
+X_PROXY_AUTHORIZATION=WmhamrdVBtXiMHoJLBwQxbJ2gsgjVMSl21TQFrniIEyEl7m0iZKp43HhOUh8IiJS
+NEXT_PUBLIC_BUYCYCLE_API_URL=https://api.buycycle.com
+NEXTAUTH_SECRET=your-dev-secret-here
+NEXTAUTH_URL=http://localhost:3000
+```
+
+## ⚠️ Security Notes
+- Never commit `.env.local` or any `.env` files to Git
+- Use strong, unique secrets for production
+- Rotate API keys periodically
+- OAuth clients should be configured for your specific domain 
