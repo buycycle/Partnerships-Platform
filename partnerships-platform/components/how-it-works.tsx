@@ -107,9 +107,14 @@ export function HowItWorks() {
               <p className="text-lg mb-6 text-white/90">
                 {t.startListingDesc}
               </p>
-              <button className="bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors self-start">
+              <a 
+                href="https://buycycle.com/de-de/sell/112059/component/item" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors self-start inline-block text-center cursor-pointer"
+              >
                 {t.listGearButton}
-              </button>
+              </a>
             </div>
           </div>
         </div>
