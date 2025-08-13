@@ -7,7 +7,7 @@ export const env = {
   // API Configuration  
   BUYCYCLE_API_URL: process.env.NEXT_PUBLIC_BUYCYCLE_API_URL || 'https://api.buycycle.com',
   API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://sponsorship.buycycle.com',
-  BUYCYCLE_API_KEY: process.env.NEXT_PUBLIC_BUYCYCLE_API_KEY || '',
+  BUYCYCLE_API_KEY: process.env.X_PROXY_AUTHORIZATION || '',
   DEFAULT_AUTH_TOKEN: process.env.NEXT_PUBLIC_DEFAULT_AUTH_TOKEN || '',
   
   // Domain Configuration

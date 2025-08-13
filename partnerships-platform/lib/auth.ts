@@ -88,7 +88,7 @@ const API_CONFIG = {
   BUYCYCLE_URL: 'https://api.buycycle.com',
   DEFAULT_HEADERS: {
     'Content-Type': 'application/json',
-    'X-Proxy-Authorization': process.env.NEXT_PUBLIC_BUYCYCLE_API_KEY || ''
+    'X-Proxy-Authorization': process.env.X_PROXY_AUTHORIZATION || ''
   },
   DEFAULT_AUTH_TOKEN: process.env.NEXT_PUBLIC_DEFAULT_AUTH_TOKEN || ''
 };

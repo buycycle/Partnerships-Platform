@@ -3,8 +3,7 @@
 ## 🔑 Critical Variables (Required for basic functionality)
 
 ### API Authentication
-- `NEXT_PUBLIC_BUYCYCLE_API_KEY` - Public Buycycle API key
-  - **Value**: `WmhamrdVBtXiMHoJLBwQxbJ2gsgjVMSl21TQFrniIEyEl7m0iZKp43HhOUh8IiJS`
+- ⚠️ **DEPRECATED**: `NEXT_PUBLIC_BUYCYCLE_API_KEY` - Use `X_PROXY_AUTHORIZATION` instead for security
 - `X_PROXY_AUTHORIZATION` - Server-side Buycycle API authentication
   - **Value**: `WmhamrdVBtXiMHoJLBwQxbJ2gsgjVMSl21TQFrniIEyEl7m0iZKp43HhOUh8IiJS`
 - `NEXT_PUBLIC_BUYCYCLE_API_URL` - Buycycle API base URL
@@ -46,7 +45,7 @@
 ### For Local Development:
 Create `.env.local` file in project root:
 ```env
-NEXT_PUBLIC_BUYCYCLE_API_KEY=WmhamrdVBtXiMHoJLBwQxbJ2gsgjVMSl21TQFrniIEyEl7m0iZKp43HhOUh8IiJS
+# NEXT_PUBLIC_BUYCYCLE_API_KEY=WmhamrdVBtXiMHoJLBwQxbJ2gsgjVMSl21TQFrniIEyEl7m0iZKp43HhOUh8IiJS  # DEPRECATED - Removed for security
 X_PROXY_AUTHORIZATION=WmhamrdVBtXiMHoJLBwQxbJ2gsgjVMSl21TQFrniIEyEl7m0iZKp43HhOUh8IiJS
 NEXT_PUBLIC_BUYCYCLE_API_URL=https://api.buycycle.com
 NEXTAUTH_SECRET=your-dev-secret-here
