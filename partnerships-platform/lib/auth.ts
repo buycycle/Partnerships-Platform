@@ -299,25 +299,25 @@ export async function login(email: string, password: string) {
  */
 export async function socialLogin(provider: 'google' | 'apple', accessToken: string) {
   try {
-    const response = await fetch(`${API_CONFIG.BUYCYCLE_URL}/en/api/v3/login/${provider}`, {
+    // Use secure server-side social login routes (like video-platform)
+    const response = await fetch(`/api/auth/social/${provider}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'X-Proxy-Authorization': API_CONFIG.DEFAULT_HEADERS['X-Proxy-Authorization']
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ access_token: accessToken })
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`${provider} login failed: ${response.status}`);
+      const errorData = await response.json().catch(() => ({ message: 'Social login failed' }));
+      throw new Error(errorData.message || `${provider} login failed: ${response.status}`);
     }
 
     const data = await response.json();
     
     // Store the token from the response
-    if (data.token) {
-      localStorage.setItem('auth_token', data.token);
+    if (data.access_token) {
+      localStorage.setItem('auth_token', data.access_token);
     }
     
     // Store refresh token if available

@@ -271,18 +271,18 @@ export const auth = {
   async socialLogin(provider: 'google' | 'apple', accessToken: string): Promise<AuthResponse> {
     try {
       console.log(`🚀 [Auth] Attempting ${provider} social login...`);
-      console.log(`🚀 [Auth] API URL: ${API_CONFIG.BUYCYCLE_URL}/en/api/v3/login/${provider}`);
+      console.log(`🚀 [Auth] Using local social login route: /api/auth/social/${provider}`);
       console.log(`🚀 [Auth] Token length: ${accessToken.length}`);
       console.log(`🚀 [Auth] Token preview: ${accessToken.substring(0, 30)}...`);
       
       const requestBody = { access_token: accessToken };
       console.log(`🚀 [Auth] Request body:`, requestBody);
       
-      const response = await fetch(`${API_CONFIG.BUYCYCLE_URL}/en/api/v3/login/${provider}`, {
+      // Use secure server-side social login routes (like video-platform)
+      const response = await fetch(`/api/auth/social/${provider}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-Proxy-Authorization': API_CONFIG.DEFAULT_HEADERS['X-Proxy-Authorization']
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestBody)
       });
