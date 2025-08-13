@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       // Continue even if DB save fails
     }
 
-    // Call Buycycle LOGIN API (not register)
+    // Call Buycycle REGISTER API (correct endpoint)
     const buycycleApiUrl = 'https://api.buycycle.com';
     const apiKey = process.env.X_PROXY_AUTHORIZATION;
 
@@ -71,16 +71,22 @@ export async function POST(request: NextRequest) {
       }, { status: 500 });
     }
 
-    console.log('🔄 [Migrate] Calling Buycycle LOGIN API...');
-    const response = await fetch(`${buycycleApiUrl}/en/api/v3/login`, {
+    console.log('🔄 [Migrate] Calling Buycycle REGISTER API...');
+    const response = await fetch(`${buycycleApiUrl}/en/api/v3/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-Proxy-Authorization': apiKey
       },
       body: JSON.stringify({ 
+        first_name,
+        last_name,
         email, 
-        password
+        password,
+        password_confirmation: password,
+        phone_number: phone_number || null,
+        type: "private",
+        i_agree: true
       })
     });
 
@@ -94,7 +100,7 @@ export async function POST(request: NextRequest) {
         errorData = { message: await response.text() };
       }
       
-      console.error('🔄 [Migrate] Login failed:', response.status, errorData);
+      console.error('🔄 [Migrate] Registration failed:', response.status, errorData);
       
       // Update status to failed
       try {
@@ -105,13 +111,13 @@ export async function POST(request: NextRequest) {
       }
       
       return NextResponse.json(
-        { success: false, message: 'Login failed. Please check your credentials.' },
+        { success: false, message: 'Registration failed. Please try again or contact support.' },
         { status: response.status }
       );
     }
 
     const data = await response.json();
-    console.log('✅ [Migrate] Login successful');
+    console.log('✅ [Migrate] Registration successful');
 
     // Update status to success
     try {

@@ -71,7 +71,7 @@ const dbConfig = {
   database: process.env.MYSQL_DATABASE || process.env.DB_NAME || 'buycycle',
   port: parseInt(process.env.MYSQL_PORT || process.env.DB_PORT || '3306'),
   connectionLimit: 5,
-  connectTimeout: 30000,
+  connectTimeout: 5000, // Reduced timeout to fail faster
   queueLimit: 0,
   ssl: (process.env.MYSQL_HOST || process.env.DB_HOST)?.includes('rds.amazonaws.com') ? { 
     rejectUnauthorized: false,
@@ -81,6 +81,13 @@ const dbConfig = {
 
 function getPool() {
   if (!pool && mysql) {
+    // Skip pool creation if hostname looks invalid (for development)
+    if (dbConfig.host.includes('cluster-cyz8jtynkntm') && !process.env.FORCE_DB_CONNECTION) {
+      console.log('🔍 [DB] Skipping database connection - invalid hostname detected');
+      console.log('🔍 [DB] Use FORCE_DB_CONNECTION=true to override this check');
+      return null;
+    }
+    
     console.log('🔍 [DB] Creating database connection pool...');
     console.log('🔍 [DB] Config:', {
       host: dbConfig.host,
