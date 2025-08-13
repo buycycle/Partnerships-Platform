@@ -170,40 +170,55 @@ export const auth = {
    */
   async login(email: string, password: string): Promise<AuthResponse> {
     try {
-      const response = await fetch(`${API_CONFIG.BUYCYCLE_URL}/en/api/v3/login`, {
+      console.log('🔍 [Auth] Starting email/password login...');
+      
+      // Use secure server-side login route (like video-platform)
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-Proxy-Authorization': API_CONFIG.DEFAULT_HEADERS['X-Proxy-Authorization']
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email, password })
       });
 
+      console.log('🔍 [Auth] Login response status:', response.status);
+
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Login failed: ${response.status}`);
+        const errorData = await response.json().catch(() => ({ message: 'Login failed' }));
+        console.error('❌ [Auth] Login failed:', errorData);
+        throw new Error(errorData.message || `Login failed: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log('✅ [Auth] Login successful, response keys:', Object.keys(data));
       
-      // Store the token from the response
-      if (data.token) {
-        localStorage.setItem('auth_token', data.token);
+      // Store the token from the response (handle both token and access_token)
+      if (data.token || data.access_token) {
+        const token = data.token || data.access_token;
+        console.log('✅ [Auth] Storing auth token:', token.substring(0, 20) + '...');
+        localStorage.setItem('auth_token', token);
+      } else {
+        console.log('❌ [Auth] No token found in login response');
       }
       
       // Store refresh token if available
       if (data.refresh_token) {
+        console.log('✅ [Auth] Storing refresh token');
         localStorage.setItem('refresh_token', data.refresh_token);
       }
       
       // Store custom auth token if available
       if (data.user && data.user.custom_auth_token) {
+        console.log('✅ [Auth] Storing custom auth token');
         localStorage.setItem('custom_auth_token', data.user.custom_auth_token);
       }
       
       // Store user data if available
       if (data.user) {
+        console.log('✅ [Auth] Storing user data for ID:', data.user.id);
         localStorage.setItem('user_data', JSON.stringify(data.user));
+      } else {
+        console.log('❌ [Auth] No user data in login response');
       }
       
       return data;

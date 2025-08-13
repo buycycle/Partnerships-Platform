@@ -28,6 +28,8 @@ export async function POST(request: NextRequest) {
       }, { status: 500 });
     }
 
+    console.log('🔄 [Login API] Attempting login with Buycycle API...');
+    
     const response = await fetch(`${buycycleApiUrl}/en/api/v3/login`, {
       method: 'POST',
       headers: {
@@ -37,18 +39,31 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({ email, password })
     });
 
+    console.log('🔄 [Login API] Buycycle response status:', response.status);
+
     if (!response.ok) {
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        errorData = { message: 'Invalid credentials' };
+      }
+      
+      console.error('❌ [Login API] Login failed:', response.status, errorData);
+      
       return NextResponse.json(
-        { success: false, message: 'Invalid credentials' },
-        { status: 401 }
+        { success: false, message: errorData.message || 'Invalid credentials' },
+        { status: response.status }
       );
     }
 
     const data = await response.json();
     
+    console.log('✅ [Login API] Buycycle login successful');
+    
     return NextResponse.json({
       success: true,
-      token: data.token,
+      access_token: data.access_token || data.token,
       refresh_token: data.refresh_token,
       user: data.user
     });
