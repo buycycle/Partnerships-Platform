@@ -61,7 +61,6 @@ export function MarketplaceSections() {
 
         {/* Brand logos section */}
         <div className="text-center mb-12">
-          <p className="text-lg text-gray-600 mb-8">{t.trustedBrands}</p>
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-70 hover:opacity-100 transition-opacity">
             <img 
               src="/brands/assets_78537f9f53b44e1aa1ec3c464489249a_021481e67463441cabcc6e250ea31e4b.jpeg"
@@ -79,8 +78,8 @@ export function MarketplaceSections() {
               className="h-12 sm:h-16 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
             />
             <img 
-              src="/brands/assets_78537f9f53b44e1aa1ec3c464489249a_ab68d17591044d78926611c0143802ce.jpeg"
-              alt="Cycling Brand Logo"
+              src="/brands/specialized.jpeg"
+              alt="Specialized"
               className="h-12 sm:h-16 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
             />
             <img 

@@ -28,11 +28,11 @@ export function HeroBanner() {
     if (language === 'fr') {
       return isMobile 
         ? '/everride_french_mobile.jpeg'
-        : '/everride_french_web.webp';
+        : '/everride_english_web.webp';
     } else {
       return isMobile 
         ? '/everride_english_mobile.jpeg'
-        : '/everride_english_web.webp';
+        : '/everride_french_web.webp';
     }
   };
 
