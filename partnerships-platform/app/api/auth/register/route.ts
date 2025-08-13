@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { executeQuery } from '@/lib/database';
 
 export async function POST(request: NextRequest) {
   try {
-    const { first_name, last_name, email, password, phone_number, type } = await request.json();
+    const { first_name, last_name, email, password, phone_number } = await request.json();
 
     // Validate required fields
     if (!first_name || !last_name || !email || !password) {
@@ -21,15 +22,45 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Basic password validation
-    if (password.length < 8) {
-      return NextResponse.json(
-        { success: false, message: 'Password must be at least 8 characters' },
-        { status: 400 }
-      );
+    // Get client info
+    const clientIp = request.headers.get('x-forwarded-for') || 
+                     request.headers.get('x-real-ip') || 
+                     'unknown';
+    const userAgent = request.headers.get('user-agent') || 'unknown';
+
+    // Save user details to partnerships_everide_users table
+    console.log('🔄 [Migrate] Saving user to partnerships_everide_users...');
+    try {
+      const saveQuery = `
+        INSERT INTO partnerships_everide_users (
+          first_name, last_name, email, phone_number, 
+          migration_status, migration_source, request_ip, user_agent,
+          created_at, updated_at
+        ) VALUES (?, ?, ?, ?, 'pending', 'everide_partnerships_platform', ?, ?, NOW(), NOW())
+        ON DUPLICATE KEY UPDATE
+          first_name = VALUES(first_name),
+          last_name = VALUES(last_name),
+          phone_number = VALUES(phone_number),
+          migration_status = 'pending',
+          updated_at = NOW()
+      `;
+      
+      await executeQuery(saveQuery, [
+        first_name,
+        last_name,
+        email,
+        phone_number || null,
+        clientIp,
+        userAgent
+      ]);
+      
+      console.log('✅ [Migrate] User saved to partnerships_everide_users');
+    } catch (dbError) {
+      console.error('❌ [Migrate] Failed to save user:', dbError);
+      // Continue even if DB save fails
     }
 
-    // Call Buycycle API register endpoint
+    // Call Buycycle LOGIN API (not register)
     const buycycleApiUrl = 'https://api.buycycle.com';
     const apiKey = process.env.X_PROXY_AUTHORIZATION;
 
@@ -40,28 +71,20 @@ export async function POST(request: NextRequest) {
       }, { status: 500 });
     }
 
-    console.log('🔄 [Register] Attempting registration with Buycycle API...');
-    console.log('🔄 [Register] User data:', { first_name, last_name, email, password: '[HIDDEN]' });
-
-    const response = await fetch(`${buycycleApiUrl}/en/api/v3/register`, {
+    console.log('🔄 [Migrate] Calling Buycycle LOGIN API...');
+    const response = await fetch(`${buycycleApiUrl}/en/api/v3/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-Proxy-Authorization': apiKey
       },
       body: JSON.stringify({ 
-        first_name, 
-        last_name, 
         email, 
-        password,
-        password_confirmation: password,
-        phone_number: phone_number || "+1234567890",
-        type: "private",
-        i_agree: true
+        password
       })
     });
 
-    console.log('🔄 [Register] Buycycle API response status:', response.status);
+    console.log('🔄 [Migrate] Buycycle API response status:', response.status);
 
     if (!response.ok) {
       let errorData;
@@ -71,66 +94,46 @@ export async function POST(request: NextRequest) {
         errorData = { message: await response.text() };
       }
       
-      console.error('🔄 [Register] Registration failed:', response.status, errorData);
+      console.error('🔄 [Migrate] Login failed:', response.status, errorData);
       
-      let errorMessage = 'Registration failed. Please try again.';
-      
-      // Handle specific error cases with detailed messages
-      if (response.status === 400) {
-        errorMessage = 'Invalid registration data. Please check your inputs.';
-      } else if (response.status === 409) {
-        errorMessage = 'An account with this email already exists. Please try logging in instead.';
-      } else if (response.status === 422) {
-        // Handle validation errors from the API
-        if (errorData && errorData.errors) {
-          const errors = errorData.errors;
-          const errorMessages = [];
-          
-          if (errors.email) {
-            errorMessages.push(`Email: ${errors.email.join(', ')}`);
-          }
-          if (errors.password) {
-            errorMessages.push(`Password: ${errors.password.join(', ')}`);
-          }
-          if (errors.phone_number) {
-            errorMessages.push(`Phone: ${errors.phone_number.join(', ')}`);
-          }
-          if (errors.first_name) {
-            errorMessages.push(`First Name: ${errors.first_name.join(', ')}`);
-          }
-          if (errors.last_name) {
-            errorMessages.push(`Last Name: ${errors.last_name.join(', ')}`);
-          }
-          if (errors.type) {
-            errorMessages.push(`Account Type: ${errors.type.join(', ')}`);
-          }
-          if (errors.i_agree) {
-            errorMessages.push(`Terms: ${errors.i_agree.join(', ')}`);
-          }
-          
-          if (errorMessages.length > 0) {
-            errorMessage = errorMessages.join('. ');
-          } else {
-            errorMessage = errorData.message || 'Please check your registration information and try again.';
-          }
-        } else {
-          errorMessage = errorData.message || 'Please check your registration information and try again.';
-        }
-      } else {
-        // Use the API's error message if available
-        errorMessage = errorData.message || errorMessage;
+      // Update status to failed
+      try {
+        const updateQuery = `UPDATE partnerships_everide_users SET migration_status = 'failed', updated_at = NOW() WHERE email = ?`;
+        await executeQuery(updateQuery, [email]);
+      } catch (dbError) {
+        console.error('❌ [Migrate] Failed to update status:', dbError);
       }
       
       return NextResponse.json(
-        { success: false, message: errorMessage },
+        { success: false, message: 'Login failed. Please check your credentials.' },
         { status: response.status }
       );
     }
 
     const data = await response.json();
-    console.log('✅ [Register] Registration successful');
+    console.log('✅ [Migrate] Login successful');
 
-    // Return the same format as login
+    // Update status to success
+    try {
+      const buycycleUserId = data.user?.id || data.user?.user_id || 'unknown';
+      const updateQuery = `
+        UPDATE partnerships_everide_users 
+        SET migration_status = 'success', 
+            buycycle_user_id = ?, 
+            buycycle_response = ?,
+            updated_at = NOW()
+        WHERE email = ?
+      `;
+      await executeQuery(updateQuery, [
+        buycycleUserId,
+        JSON.stringify(data.user || {}),
+        email
+      ]);
+      console.log('✅ [Migrate] Status updated to success');
+    } catch (dbError) {
+      console.error('❌ [Migrate] Failed to update success status:', dbError);
+    }
+
     return NextResponse.json({
       success: true,
       access_token: data.access_token,
@@ -139,7 +142,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error('Migration error:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
       { status: 500 }

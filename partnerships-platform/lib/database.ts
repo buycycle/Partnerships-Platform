@@ -592,4 +592,174 @@ export async function createUserIfNotExists(userId: string, userData: {
   }
 } 
 
+// ===== MIGRATION TRACKING FUNCTIONS =====
+
+// Record migration request
+export async function recordMigrationRequest(migrationData: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string;
+  requestIp?: string;
+  userAgent?: string;
+}) {
+  console.log('🔍 [DB] recordMigrationRequest called with:', {
+    ...migrationData,
+    requestIp: migrationData.requestIp,
+    userAgent: migrationData.userAgent?.substring(0, 50) + '...'
+  });
+  
+  try {
+    const query = `
+      INSERT INTO partnerships_everide_users (
+        first_name, last_name, email, phone_number, 
+        migration_status, migration_source, request_ip, user_agent
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        first_name = VALUES(first_name),
+        last_name = VALUES(last_name),
+        phone_number = VALUES(phone_number),
+        migration_status = 'pending',
+        updated_at = CURRENT_TIMESTAMP
+    `;
+    
+    const result = await executeQuery(query, [
+      migrationData.firstName,
+      migrationData.lastName,
+      migrationData.email,
+      migrationData.phoneNumber || null,
+      'pending',
+      'everide_partnerships_platform',
+      migrationData.requestIp || null,
+      migrationData.userAgent || null
+    ]);
+    
+    console.log('✅ [DB] Migration request recorded:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ [DB] Error recording migration request:', error);
+    throw error;
+  }
+}
+
+// Update migration status
+export async function updateMigrationStatus(
+  email: string, 
+  status: 'pending' | 'success' | 'failed' | 'duplicate',
+  buycycleUserId?: string,
+  buycycleResponse?: any
+) {
+  console.log('🔍 [DB] updateMigrationStatus called with:', {
+    email,
+    status,
+    buycycleUserId,
+    hasResponse: !!buycycleResponse
+  });
+  
+  try {
+    const query = `
+      UPDATE partnerships_everide_users 
+      SET migration_status = ?, 
+          buycycle_user_id = ?, 
+          buycycle_response = ?,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE email = ?
+    `;
+    
+    const result = await executeQuery(query, [
+      status,
+      buycycleUserId || null,
+      buycycleResponse ? JSON.stringify(buycycleResponse) : null,
+      email
+    ]);
+    
+    console.log('✅ [DB] Migration status updated:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ [DB] Error updating migration status:', error);
+    throw error;
+  }
+}
+
+// Get migration request by email
+export async function getMigrationByEmail(email: string) {
+  try {
+    const query = 'SELECT * FROM partnerships_everide_users WHERE email = ? ORDER BY created_at DESC LIMIT 1';
+    const result = await executeQuery(query, [email]);
+    return Array.isArray(result) && result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.error('❌ [DB] Error getting migration by email:', error);
+    return null;
+  }
+}
+
+// Get all migration requests with pagination
+export async function getAllMigrationRequests(limit: number = 50, offset: number = 0, status?: string) {
+  try {
+    let query = `
+      SELECT id, first_name, last_name, email, phone_number, 
+             migration_status, migration_source, buycycle_user_id,
+             created_at, updated_at
+      FROM partnerships_everide_users
+    `;
+    const params: any[] = [];
+    
+    if (status) {
+      query += ' WHERE migration_status = ?';
+      params.push(status);
+    }
+    
+    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
+    params.push(limit, offset);
+    
+    const result = await executeQuery(query, params);
+    return Array.isArray(result) ? result : [];
+  } catch (error) {
+    console.error('❌ [DB] Error getting migration requests:', error);
+    return [];
+  }
+}
+
+// Get migration statistics
+export async function getMigrationStats() {
+  try {
+    const query = `
+      SELECT 
+        migration_status,
+        COUNT(*) as count,
+        DATE(created_at) as date
+      FROM partnerships_everide_users 
+      GROUP BY migration_status, DATE(created_at)
+      ORDER BY date DESC, migration_status
+    `;
+    
+    const result = await executeQuery(query);
+    return Array.isArray(result) ? result : [];
+  } catch (error) {
+    console.error('❌ [DB] Error getting migration stats:', error);
+    return [];
+  }
+}
+
+// Add migration audit log entry
+export async function addMigrationAuditLog(partnershipsEverideUserId: number, action: string, details?: any) {
+  try {
+    const query = `
+      INSERT INTO partnerships_everide_audit_log (partnerships_everide_user_id, action, details)
+      VALUES (?, ?, ?)
+    `;
+    
+    const result = await executeQuery(query, [
+      partnershipsEverideUserId,
+      action,
+      details ? JSON.stringify(details) : null
+    ]);
+    
+    return result;
+  } catch (error) {
+    console.error('❌ [DB] Error adding migration audit log:', error);
+    return null;
+  }
+}
+
  
