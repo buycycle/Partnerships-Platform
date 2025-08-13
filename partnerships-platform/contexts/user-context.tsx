@@ -37,6 +37,7 @@ export function UserProvider({ children }: UserProviderProps) {
       // Try to get current user
       const currentUser = await auth.getCurrentUser();
       console.log('🔄 [UserContext] Got user data:', currentUser ? `User ID: ${currentUser.id}` : 'No user data');
+      console.log('🔄 [UserContext] Full user object:', currentUser);
       
       if (currentUser) {
         setUser(currentUser);

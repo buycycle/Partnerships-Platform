@@ -301,9 +301,12 @@ export const auth = {
       console.log(`✅ [Auth] User data keys:`, data.user ? Object.keys(data.user) : 'No user data');
       
       // Store the token from the response
-      if (data.token) {
-        console.log(`✅ [Auth] Storing auth token...`);
-        localStorage.setItem('auth_token', data.token);
+      if (data.access_token || data.token) {
+        const token = data.access_token || data.token;
+        console.log(`✅ [Auth] Storing auth token:`, token.substring(0, 20) + '...');
+        localStorage.setItem('auth_token', token);
+      } else {
+        console.log(`❌ [Auth] No token found in response`);
       }
       
       // Store refresh token if available
@@ -320,9 +323,21 @@ export const auth = {
       
       // Store user data if available
       if (data.user) {
-        console.log(`✅ [Auth] Storing user data...`);
+        console.log(`✅ [Auth] Storing user data for ID:`, data.user.id);
         localStorage.setItem('user_data', JSON.stringify(data.user));
+      } else {
+        console.log(`❌ [Auth] No user data in response`);
       }
+      
+      // Verify what's actually stored
+      setTimeout(() => {
+        console.log(`🔍 [Auth] Final localStorage verification:`, {
+          auth_token: !!localStorage.getItem('auth_token'),
+          user_data: !!localStorage.getItem('user_data'),
+          custom_auth_token: !!localStorage.getItem('custom_auth_token'),
+          user_id: localStorage.getItem('user_data') ? JSON.parse(localStorage.getItem('user_data')!).id : 'none'
+        });
+      }, 100);
       
       console.log(`✅ [Auth] ${provider} login completed successfully`);
       return data;
@@ -362,18 +377,35 @@ export const auth = {
    */
   async getCurrentUser(): Promise<User | null> {
     try {
+      console.log('🔍 [getCurrentUser] Starting getCurrentUser...');
+      
       // First check localStorage for cached user data
       const storedUserData = localStorage.getItem('user_data');
+      const authToken = localStorage.getItem('auth_token');
+      const customToken = localStorage.getItem('custom_auth_token');
+      
+      console.log('🔍 [getCurrentUser] localStorage check:', {
+        hasUserData: !!storedUserData,
+        hasAuthToken: !!authToken,
+        hasCustomToken: !!customToken,
+        userDataPreview: storedUserData ? JSON.parse(storedUserData).id : 'none'
+      });
+      
       if (storedUserData) {
         try {
           const userData = JSON.parse(storedUserData);
           // Verify we still have a valid token
           const token = localStorage.getItem('auth_token');
           if (token) {
+            console.log('✅ [getCurrentUser] Returning cached user data:', userData.id);
             return userData;
+          } else {
+            console.log('❌ [getCurrentUser] No auth_token, clearing stored user data');
+            localStorage.removeItem('user_data');
           }
         } catch (e) {
           // Invalid stored data, remove it
+          console.log('❌ [getCurrentUser] Invalid stored user data, clearing');
           localStorage.removeItem('user_data');
         }
       }
@@ -420,9 +452,10 @@ export const auth = {
         }
       }
 
+      console.log('❌ [getCurrentUser] No valid tokens, returning null');
       return null;
     } catch (error) {
-      console.error('Failed to get current user:', error);
+      console.error('❌ [getCurrentUser] Error getting current user:', error);
       // Clear invalid tokens - but preserve custom_auth_token
       localStorage.removeItem('auth_token');
       localStorage.removeItem('refresh_token');
