@@ -19,6 +19,7 @@ import {
 } from "@/lib/analytics"
 import { useUser } from "@/contexts/user-context"
 import { useLanguage } from "@/contexts/language-context"
+import { auth } from "@/lib/api"
 
 // Separate component for search params logic
 function SearchParamsHandler({ onUtmParamsChange }: { onUtmParamsChange: (params: UTMParams) => void }) {
@@ -79,17 +80,30 @@ function HomePageContent() {
   }
 
   const handleSignOut = async () => {
-    // Clear all auth tokens from localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token')
-      localStorage.removeItem('refresh_token')
-      localStorage.removeItem('custom_auth_token')
+    try {
+      console.log('🚪 [HomePage] Signing out user...')
+      
+      // Use the proper logout function from auth library
+      await auth.logout()
+      
+      // Refresh user context to reflect logged out state
+      await refreshUser()
+      
+      console.log('✅ [HomePage] User signed out successfully')
+    } catch (error) {
+      console.error('❌ [HomePage] Error signing out:', error)
+      
+      // Even if logout API fails, clear local tokens and refresh user context
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token')
+        localStorage.removeItem('refresh_token')
+        localStorage.removeItem('custom_auth_token')
+        localStorage.removeItem('user_data')
+      }
+      
+      await refreshUser()
+      console.log('🚪 [HomePage] User signed out (fallback)')
     }
-    
-    // Refresh user context to reflect logged out state
-    await refreshUser()
-    
-    console.log('🚪 [HomePage] User signed out successfully')
   }
 
   return (
