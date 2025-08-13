@@ -416,8 +416,7 @@ export const auth = {
         return null;
       }
 
-      // Try to fetch user data from Buycycle API using custom auth token
-      const customToken = localStorage.getItem('custom_auth_token');
+      // Try to fetch user data from Buycycle API using custom auth token (reuse variable from above)
       if (customToken) {
         try {
           const response = await fetch(`${API_CONFIG.BUYCYCLE_URL}/en/api/v4/user`, {
