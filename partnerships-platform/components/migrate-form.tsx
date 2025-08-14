@@ -61,7 +61,7 @@ export function MigrateForm() {
   };
 
   return (
-    <section id="migrate-section" className="py-16 bg-gray-50">
+    <section id="migrate-section" className="pt-16 pb-8 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center">
           <div className="bg-white rounded-lg shadow-lg p-8 max-w-4xl w-full">

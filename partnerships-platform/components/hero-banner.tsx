@@ -27,11 +27,11 @@ export function HeroBanner() {
   const getBannerImage = () => {
     if (language === 'fr') {
       return isMobile 
-        ? '/everride_french_mobile.jpeg'
+        ? '/everride_french_mobile.webp'
         : '/everride_english_web.webp';
     } else {
       return isMobile 
-        ? '/everride_english_mobile.jpeg'
+        ? '/everride_english_mobile.webp'
         : '/everride_french_web.webp';
     }
   };
@@ -46,23 +46,28 @@ export function HeroBanner() {
   };
 
   return (
-    <div className="relative bg-white">
-      {/* Hero Image */}
-      <a 
-        href="https://buycycle.com/en-us" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="block cursor-pointer hover:opacity-95 transition-opacity duration-300"
-        title="Visit buycycle.com"
-      >
-        <img 
-          src={getBannerImage()}
-          alt={getAltText()}
-          className="w-full h-auto object-cover max-h-[300px] sm:max-h-[400px] md:max-h-[500px] lg:max-h-[600px]"
-          loading="eager"
-          decoding="async"
-        />
-      </a>
+    <div className="relative bg-white pt-2 sm:pt-3 md:pt-4">
+      {/* Hero Image - Smaller and centered like buycycle.com */}
+      <div className="flex justify-center px-4 sm:px-6 lg:px-8">
+        <a 
+          href="https://buycycle.com/en-de/sell" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="block cursor-pointer hover:opacity-95 transition-opacity duration-300 w-full max-w-6xl"
+          title="Sell on buycycle.com"
+        >
+          <img 
+            src={getBannerImage()}
+            alt={getAltText()}
+            className={`w-full h-auto ${isMobile 
+              ? 'object-contain' 
+              : 'object-cover max-h-[250px] md:max-h-[300px] lg:max-h-[350px]'
+            }`}
+            loading="eager"
+            decoding="async"
+          />
+        </a>
+      </div>
     </div>
   );
 }
