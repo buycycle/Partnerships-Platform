@@ -176,7 +176,7 @@ export function MigrateForm() {
 
             <div className="mt-4 text-center">
               <p className="text-sm text-gray-500">
-                Already have an account? Use the login option in the header.
+                {t.alreadyHaveAccount}
               </p>
             </div>
           </div>

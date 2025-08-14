@@ -119,6 +119,7 @@ const translations: Record<Language, Translations> = {
     notesLabel: 'Notes (Optional)',
     notesPlaceholder: 'Any additional information or special requests...',
     migrateButton: 'Migrate Account',
+    alreadyHaveAccount: 'Already have an account? Use the login option in the header.',
     
     // Marketplace
     marketplaceTitle: 'buycycle - the marketplace for pre-owned sports gear.',
@@ -199,19 +200,20 @@ const translations: Record<Language, Translations> = {
     topBanner3: 'Livraison 79€ sur tous les vélos',
     
     // Migration Form
-    migrateTitle: 'Migrez votre compte everide vers buycycle',
+    migrateTitle: 'Transférez votre compte everide vers buycycle',
     migrateSubtitle: 'Rejoignez le plus grand marché d\'équipements sportifs d\'occasion.',
     firstName: 'Prénom',
     lastName: 'Nom',
     emailLabel: 'Email',
-    mobileLabel: 'Mobile',
+    mobileLabel: 'Numéro de téléphone',
     passwordLabel: 'Mot de passe',
     notesLabel: 'Notes (Optionnel)',
     notesPlaceholder: 'Informations supplémentaires ou demandes spéciales...',
-    migrateButton: 'Migrer le compte',
+    migrateButton: 'Transférez le compte',
+    alreadyHaveAccount: 'Avez-vous déjà un compte buycycle ? Dirigez-vous vers la connexion en haut de cette page.',
     
     // Marketplace
-    marketplaceTitle: 'buycycle - le marché des équipements sportifs d\'occasion.',
+    marketplaceTitle: 'buycycle - la plateforme pour vendre et acheter votre équipement sportif.',
     trustedBrands: 'Approuvé par les meilleures marques cyclistes',
     partsTitle: 'Achetez des pièces et accessoires. Améliorez votre vélo',
     
@@ -239,19 +241,19 @@ const translations: Record<Language, Translations> = {
     step3: 'Recevoir',
     step4: 'Profiter',
     step1Desc: 'Parcourez des milliers de vélos d\'occasion',
-    step2Desc: 'Paiement sécurisé avec protection acheteur',
-    step3Desc: 'Livraison rapide et assurée à votre porte',
+    step2Desc: 'Soyez rassurés grâce à nos paiements sécurisés et à notre protection des acheteurs',
+    step3Desc: 'Profitez d\'une livraison rapide et assurée',
     step4Desc: 'Roulez avec votre nouveau vélo !',
     
     // How to sell steps
     sellStep1Desc: 'Créez votre annonce en quelques clics.',
-    sellStep2Desc: 'Recevez des offres et répondez aux questions. Les ventes prennent en moyenne 7 jours. Votre paiement est toujours sécurisé.',
+    sellStep2Desc: 'Recevez des offres et répondez aux questions. Les ventes prennent en moyenne 7 jours.',
     sellStep3Desc: 'Nous fournissons tout ce dont vous avez besoin pour emballer et expédier votre article. Vous recevrez le paiement une fois que l\'article est arrivé et que l\'acheteur confirme la livraison dans les 48 heures.',
     
     // Bottom banner
-    startListingTitle: 'Commencez à lister et vendez vos équipements sportifs maintenant !',
+    startListingTitle: 'Commencez à mettre en ligne vos articles et vendez vos équipements sportifs maintenant !',
     startListingDesc: 'Pas de rendez-vous douteux, pas de ghosting, pas de "derniers prix". Avec buycycle, vous obtenez des ventes transparentes, livraison assurée, matériel d\'emballage solide et paiements sécurisés.',
-    listGearButton: 'Listez vos équipements sportifs en 2 minutes',
+    listGearButton: 'Mettez vos articles en ligne en moins de 2 minutes',
     
     // Login Modal
     loginTitle: 'Se connecter à buycycle',
