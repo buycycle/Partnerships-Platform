@@ -108,7 +108,7 @@ export function HowItWorks() {
                 {t.startListingDesc}
               </p>
               <a 
-                href="https://buycycle.com/de-de/sell/112059/component/item" 
+                href="https://buycycle.com/sell/?utm_source=everide&utm_medium=redirect&utm_campaign=CT" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors self-start inline-block text-center cursor-pointer"

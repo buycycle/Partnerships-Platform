@@ -19,6 +19,7 @@ export function MigrateForm() {
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -37,9 +38,17 @@ export function MigrateForm() {
       );
 
       toast({
-        title: "Migration Request Submitted Successfully!",
-        description: "Your Everide account migration has been initiated. Welcome to buycycle!",
+        title: "Migration request submitted successfully!",
+        description: "You can now start using buycycle and log-in with the password you just created. Welcome to buycycle!",
       });
+
+      // Set success state
+      setIsSuccess(true);
+
+      // Redirect after 3 seconds in the same window
+      setTimeout(() => {
+        window.location.href = 'https://buycycle.com/sell/?utm_source=everide&utm_medium=redirect&utm_campaign=CT';
+      }, 5000);
 
       // Reset form
       setFormData({ firstName: '', lastName: '', email: '', mobile: '', password: '' });
@@ -57,6 +66,13 @@ export function MigrateForm() {
   };
 
   const handleInputChange = (field: string, value: string) => {
+    // Validate name fields to only allow letters, spaces, hyphens, and apostrophes
+    if (field === 'firstName' || field === 'lastName') {
+      const nameRegex = /^[a-zA-ZÀ-ÿ\s'-]*$/;
+      if (!nameRegex.test(value)) {
+        return; // Don't update if invalid characters
+      }
+    }
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -89,6 +105,8 @@ export function MigrateForm() {
                     required
                     disabled={isLoading}
                     className="mt-1"
+                    pattern="[a-zA-ZÀ-ÿ\s'-]+"
+                    title="Please enter a valid first name (letters, spaces, hyphens, and apostrophes only)"
                   />
                 </div>
 
@@ -105,6 +123,8 @@ export function MigrateForm() {
                     required
                     disabled={isLoading}
                     className="mt-1"
+                    pattern="[a-zA-ZÀ-ÿ\s'-]+"
+                    title="Please enter a valid last name (letters, spaces, hyphens, and apostrophes only)"
                   />
                 </div>
 
@@ -160,10 +180,16 @@ export function MigrateForm() {
 
               <Button 
                 type="submit" 
-                className="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 mt-6"
-                disabled={isLoading}
+                className={`w-full font-medium py-3 mt-6 ${
+                  isSuccess 
+                    ? 'bg-green-600 hover:bg-green-700' 
+                    : 'bg-black hover:bg-gray-800'
+                } text-white`}
+                disabled={isLoading || isSuccess}
               >
-                {isLoading ? (
+                {isSuccess ? (
+                  'SUCCESS! - WELCOME TO BUYCYCLE'
+                ) : isLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     SUBMITTING...

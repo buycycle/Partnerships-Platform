@@ -50,7 +50,7 @@ export function HeroBanner() {
       {/* Hero Image - Smaller and centered like buycycle.com */}
       <div className="flex justify-center px-4 sm:px-6 lg:px-8">
         <a 
-          href="https://buycycle.com/en-de/sell" 
+          href="https://buycycle.com/sell/?utm_source=everide&utm_medium=redirect&utm_campaign=CT" 
           target="_blank" 
           rel="noopener noreferrer"
           className="block cursor-pointer hover:opacity-95 transition-opacity duration-300 w-full max-w-6xl"
