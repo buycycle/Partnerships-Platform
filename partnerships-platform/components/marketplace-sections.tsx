@@ -1,6 +1,7 @@
 'use client';
 
 import { useLanguage } from '@/contexts/language-context';
+import { MigrateForm } from './migrate-form';
 
 export function MarketplaceSections() {
   const { t } = useLanguage();
@@ -57,6 +58,11 @@ export function MarketplaceSections() {
               className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
             />
           </a>
+        </div>
+
+        {/* Migration Form */}
+        <div className="mb-16">
+          <MigrateForm />
         </div>
 
         {/* Brand logos section */}

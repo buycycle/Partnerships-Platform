@@ -109,7 +109,7 @@ const translations: Record<Language, Translations> = {
     topBanner3: '€79 shipping on all bikes',
     
     // Migration Form
-    migrateTitle: 'Migrate your everide account to buycycle',
+    migrateTitle: 'Create an account on buycycle',
     migrateSubtitle: 'Join the largest marketplace for pre-owned bikes and sports equipment.',
     firstName: 'First name',
     lastName: 'Last name',
@@ -119,7 +119,7 @@ const translations: Record<Language, Translations> = {
     passwordLabel: 'Password',
     notesLabel: 'Notes (Optional)',
     notesPlaceholder: 'Any additional information or special requests...',
-    migrateButton: 'Migrate Account',
+    migrateButton: 'Sign Up',
     alreadyHaveAccount: 'Already have an account? Use the login option in the header.',
     
     // Marketplace
@@ -201,7 +201,7 @@ const translations: Record<Language, Translations> = {
     topBanner3: 'Livraison 79€ sur tous les vélos',
     
     // Migration Form
-    migrateTitle: 'Transférez votre compte everide vers buycycle',
+    migrateTitle: 'Créez un compte sur buycycle',
     migrateSubtitle: 'Rejoignez le plus grand marché d\'équipements sportifs d\'occasion.',
     firstName: 'Prénom',
     lastName: 'Nom',
@@ -211,7 +211,7 @@ const translations: Record<Language, Translations> = {
     passwordLabel: 'Mot de passe',
     notesLabel: 'Notes (Optionnel)',
     notesPlaceholder: 'Informations supplémentaires ou demandes spéciales...',
-    migrateButton: 'Transférez le compte',
+    migrateButton: 'S\'inscrire sur buycycle',
     alreadyHaveAccount: 'Avez-vous déjà un compte buycycle ? Dirigez-vous vers la connexion en haut de cette page.',
     
     // Marketplace
@@ -291,7 +291,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>('fr');
 
   // Load language from localStorage on mount
   useEffect(() => {

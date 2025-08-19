@@ -9,6 +9,7 @@ import { MigrateForm } from "@/components/migrate-form"
 import { MarketplaceSections } from "@/components/marketplace-sections"
 import { HowItWorks } from "@/components/how-it-works"
 import { AppDownloadBanner } from "@/components/app-download-banner"
+import { TopNavigation } from "@/components/top-navigation"
 import { LanguageSelector } from "@/components/language-selector"
 import { 
   extractUTMParams, 
@@ -169,7 +170,7 @@ function HomePageContent() {
                 {t.sell}
               </a>
             </div>
-            <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="flex items-center space-x-3 sm:space-x-4">
               <LanguageSelector />
               {!isUserLoggedIn ? (
                 <button 
@@ -200,13 +201,13 @@ function HomePageContent() {
         </div>
       </header>
 
+      {/* Top Navigation Menu */}
+      <TopNavigation />
+
       {/* Main Content */}
       <main>
-      {/* Hero Banner */}
+        {/* Hero Banner */}
         <HeroBanner />
-        
-        {/* Migration Form */}
-        <MigrateForm />
         
         {/* Marketplace Sections */}
         <MarketplaceSections />
