@@ -35,6 +35,14 @@ export interface Translations {
   trustedBrands: string;
   partsTitle: string;
   
+  // Top Navigation Menu
+  roadGravelLabel: string;
+  mountainBikesLabel: string;
+  bikePartsLabel: string;
+  accessoriesLabel: string;
+  apparelLabel: string;
+  framesetsLabel: string;
+  
   // Product Categories
   fork: string;
   rearSuspension: string;
@@ -126,6 +134,14 @@ const translations: Record<Language, Translations> = {
     marketplaceTitle: 'buycycle - the marketplace for pre-owned sports gear.',
     trustedBrands: 'Trusted by top cycling brands',
     partsTitle: 'Buy parts and accessories. Upgrade your bike',
+    
+    // Top Navigation Menu
+    roadGravelLabel: 'Road & Gravel',
+    mountainBikesLabel: 'Mountain Bikes',
+    bikePartsLabel: 'Bike Parts',
+    accessoriesLabel: 'Accessories',
+    apparelLabel: 'Apparel',
+    framesetsLabel: 'Framesets',
     
     // Product Categories
     fork: 'Fork',
@@ -219,6 +235,14 @@ const translations: Record<Language, Translations> = {
     trustedBrands: 'Approuvé par les meilleures marques cyclistes',
     partsTitle: 'Achetez des pièces et accessoires. Améliorez votre vélo',
     
+    // Top Navigation Menu
+    roadGravelLabel: 'Route & Gravel',
+    mountainBikesLabel: 'VTT',
+    bikePartsLabel: 'Pièces de vélo',
+    accessoriesLabel: 'Accessoires',
+    apparelLabel: 'Vêtements',
+    framesetsLabel: 'Cadres',
+    
     // Product Categories
     fork: 'Fourche',
     rearSuspension: 'Suspension arrière',
@@ -299,15 +323,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       const savedLanguage = localStorage.getItem('preferred-language') as Language;
       if (savedLanguage && translations[savedLanguage]) {
         setLanguage(savedLanguage);
-      } else {
-        // Detect browser language
-        const browserLang = navigator.language?.split('-')[0];
-        if (browserLang === 'fr') {
+              } else {
+          // Default to French for all users
           setLanguage('fr');
-        } else {
-          setLanguage('en'); // Default to English for all other languages
         }
-      }
     }
   }, []);
 

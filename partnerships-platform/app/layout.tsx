@@ -8,7 +8,7 @@ import { Footer } from '@/components/footer'
 import { LoginModalRenderer } from '@/components/auth/login-modal-renderer'
 
 export const metadata: Metadata = {
-  title: 'Buycycle - Global Marketplace for Pre-owned Bikes',
+  title: 'buycycle - Global Marketplace for Pre-owned Bikes',
   description: 'Buy and sell bikes, cycling equipment, and sports gear on the world\'s leading marketplace for pre-owned bicycles. Everide joins buycycle for a bigger community!',
   generator: 'buycycle',
 }
