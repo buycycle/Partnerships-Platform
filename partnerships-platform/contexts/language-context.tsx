@@ -205,7 +205,7 @@ const translations: Record<Language, Translations> = {
     firstName: 'Prénom',
     lastName: 'Nom',
     emailLabel: 'Email',
-    mobileLabel: 'Numéro de téléphone',
+    mobileLabel: 'Numéro de bla bla',
     passwordLabel: 'Mot de passe',
     notesLabel: 'Notes (Optionnel)',
     notesPlaceholder: 'Informations supplémentaires ou demandes spéciales...',
