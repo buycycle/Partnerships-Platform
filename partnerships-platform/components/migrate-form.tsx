@@ -151,7 +151,7 @@ export function MigrateForm() {
                   <Input
                     id="mobile"
                     type="tel"
-                    placeholder="Mobile Number"
+                    placeholder={t.mobilePlaceholder}
                     value={formData.mobile}
                     onChange={(e) => handleInputChange('mobile', e.target.value)}
                     required

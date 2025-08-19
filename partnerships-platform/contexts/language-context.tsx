@@ -23,10 +23,12 @@ export interface Translations {
   lastName: string;
   emailLabel: string;
   mobileLabel: string;
+  mobilePlaceholder: string;
   passwordLabel: string;
   notesLabel: string;
   notesPlaceholder: string;
   migrateButton: string;
+  alreadyHaveAccount: string;
   
   // Marketplace
   marketplaceTitle: string;
@@ -77,8 +79,6 @@ export interface Translations {
   loginSubtitle: string;
   googleButton: string;
   orContinueWith: string;
-  firstName: string;
-  lastName: string;
   phoneNumber: string;
   email: string;
   password: string;
@@ -115,6 +115,7 @@ const translations: Record<Language, Translations> = {
     lastName: 'Last name',
     emailLabel: 'Email',
     mobileLabel: 'Mobile',
+    mobilePlaceholder: 'Mobile Number',
     passwordLabel: 'Password',
     notesLabel: 'Notes (Optional)',
     notesPlaceholder: 'Any additional information or special requests...',
@@ -205,7 +206,8 @@ const translations: Record<Language, Translations> = {
     firstName: 'Prénom',
     lastName: 'Nom',
     emailLabel: 'Email',
-    mobileLabel: 'Numéro de bla bla',
+    mobileLabel: 'Numéro de téléphone',
+    mobilePlaceholder: 'Numéro de bla bla',
     passwordLabel: 'Mot de passe',
     notesLabel: 'Notes (Optionnel)',
     notesPlaceholder: 'Informations supplémentaires ou demandes spéciales...',
