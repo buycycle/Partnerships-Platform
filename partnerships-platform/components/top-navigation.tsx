@@ -8,27 +8,27 @@ export function TopNavigation() {
   const menuItems = [
     {
       label: t.roadGravelLabel,
-      href: 'https://buycycle.com/en-de/shop/bike-types/road-gravel'
+      href: 'https://buycycle.com/shop/bike-types/road-gravel'
     },
     {
       label: t.mountainBikesLabel,
-      href: 'https://buycycle.com/en-de/shop/bike-types/mountainbike'
+      href: 'https://buycycle.com/shop/bike-types/mountainbike'
     },
     {
       label: t.bikePartsLabel,
-      href: 'https://buycycle.com/en-de/shop/main-types/bike-part'
+      href: 'https://buycycle.com/shop/main-types/bike-part'
     },
     {
       label: t.accessoriesLabel,
-      href: 'https://buycycle.com/en-de/shop/main-types/accessories/types/accessories'
+      href: 'https://buycycle.com/shop/main-types/accessories/types/accessories'
     },
     {
       label: t.apparelLabel,
-      href: 'https://buycycle.com/en-de/shop/main-types/apparel'
+      href: 'https://buycycle.com/shop/main-types/apparel'
     },
     {
       label: t.framesetsLabel,
-      href: 'https://buycycle.com/en-de/shop/is_frameset/1'
+      href: 'https://buycycle.com/shop/is_frameset/1'
     }
   ];
 
