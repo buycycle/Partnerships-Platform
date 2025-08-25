@@ -30,6 +30,8 @@ export async function POST(request: NextRequest) {
 
     // Save user details to partnerships_everide_users table
     console.log('🔄 [Migrate] Saving user to partnerships_everide_users...');
+    console.log('🔄 [Migrate] User data:', { first_name, last_name, email, phone_number, clientIp, userAgent });
+    
     try {
       const saveQuery = `
         INSERT INTO partnerships_everide_users (
@@ -45,7 +47,10 @@ export async function POST(request: NextRequest) {
           updated_at = NOW()
       `;
       
-      await executeQuery(saveQuery, [
+      console.log('🔄 [Migrate] Executing query:', saveQuery);
+      console.log('🔄 [Migrate] Query parameters:', [first_name, last_name, email, phone_number || null, clientIp, userAgent]);
+      
+      const result = await executeQuery(saveQuery, [
         first_name,
         last_name,
         email,
@@ -54,9 +59,15 @@ export async function POST(request: NextRequest) {
         userAgent
       ]);
       
-      console.log('✅ [Migrate] User saved to partnerships_everide_users');
-    } catch (dbError) {
+      console.log('✅ [Migrate] User saved to partnerships_everide_users. Result:', result);
+    } catch (dbError: any) {
       console.error('❌ [Migrate] Failed to save user:', dbError);
+      console.error('❌ [Migrate] Error details:', {
+        message: dbError.message,
+        code: dbError.code,
+        sqlState: dbError.sqlState,
+        errno: dbError.errno
+      });
       // Continue even if DB save fails
     }
 
@@ -105,9 +116,18 @@ export async function POST(request: NextRequest) {
       // Update status to failed
       try {
         const updateQuery = `UPDATE partnerships_everide_users SET migration_status = 'failed', updated_at = NOW() WHERE email = ?`;
-        await executeQuery(updateQuery, [email]);
-      } catch (dbError) {
+        console.log('🔄 [Migrate] Updating status to failed for email:', email);
+        
+        const failedUpdateResult = await executeQuery(updateQuery, [email]);
+        console.log('✅ [Migrate] Status updated to failed. Result:', failedUpdateResult);
+      } catch (dbError: any) {
         console.error('❌ [Migrate] Failed to update status:', dbError);
+        console.error('❌ [Migrate] Failed update error details:', {
+          message: dbError.message,
+          code: dbError.code,
+          sqlState: dbError.sqlState,
+          errno: dbError.errno
+        });
       }
       
       return NextResponse.json(
@@ -130,14 +150,25 @@ export async function POST(request: NextRequest) {
             updated_at = NOW()
         WHERE email = ?
       `;
-      await executeQuery(updateQuery, [
+      
+      console.log('🔄 [Migrate] Updating status to success for email:', email);
+      console.log('🔄 [Migrate] Buycycle user ID:', buycycleUserId);
+      
+      const updateResult = await executeQuery(updateQuery, [
         buycycleUserId,
         JSON.stringify(data.user || {}),
         email
       ]);
-      console.log('✅ [Migrate] Status updated to success');
-    } catch (dbError) {
+      
+      console.log('✅ [Migrate] Status updated to success. Result:', updateResult);
+    } catch (dbError: any) {
       console.error('❌ [Migrate] Failed to update success status:', dbError);
+      console.error('❌ [Migrate] Update error details:', {
+        message: dbError.message,
+        code: dbError.code,
+        sqlState: dbError.sqlState,
+        errno: dbError.errno
+      });
     }
 
     return NextResponse.json({

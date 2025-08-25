@@ -57,10 +57,15 @@ let pool: any = null;
 
 try {
   if (typeof window === 'undefined') {
+    console.log('🔍 [DB] Attempting to load mysql2/promise module...');
     mysql = require('mysql2/promise');
+    console.log('✅ [DB] mysql2/promise module loaded successfully');
+  } else {
+    console.log('🔍 [DB] Running in browser, skipping MySQL module load');
   }
 } catch (error) {
-  console.log('MySQL module not available, using mock implementation');
+  console.error('❌ [DB] Failed to load MySQL module:', error);
+  console.log('❌ [DB] MySQL module not available, using mock implementation');
 }
 
 // Database configuration
@@ -79,13 +84,39 @@ const dbConfig = {
   } : false
 };
 
+// Debug: Log the database configuration (without sensitive data)
+console.log('🔍 [DB] Database configuration loaded:', {
+  host: dbConfig.host,
+  user: dbConfig.user,
+  database: dbConfig.database,
+  port: dbConfig.port,
+  ssl: !!dbConfig.ssl,
+  envVars: {
+    MYSQL_HOST: !!process.env.MYSQL_HOST,
+    DB_HOST: !!process.env.DB_HOST,
+    MYSQL_USER: !!process.env.MYSQL_USER,
+    DB_USER: !!process.env.DB_USER,
+    MYSQL_DATABASE: !!process.env.MYSQL_DATABASE,
+    DB_NAME: !!process.env.DB_NAME
+  }
+});
+
 function getPool() {
+  console.log('🔍 [DB] getPool() called. Pool exists:', !!pool, 'MySQL module loaded:', !!mysql);
+  
   if (!pool && mysql) {
-    // Skip pool creation if hostname looks invalid (for development)
-    if (dbConfig.host.includes('cluster-cyz8jtynkntm') && !process.env.FORCE_DB_CONNECTION) {
-      console.log('🔍 [DB] Skipping database connection - invalid hostname detected');
+    console.log('🔍 [DB] Creating new database pool...');
+    
+    // Only skip if it's the specific invalid development hostname
+    if (dbConfig.host === 'cluster-cyz8jtynkntm' && !process.env.FORCE_DB_CONNECTION) {
+      console.log('🔍 [DB] Skipping database connection - invalid development hostname detected');
       console.log('🔍 [DB] Use FORCE_DB_CONNECTION=true to override this check');
       return null;
+    }
+    
+    // Allow all valid RDS hostnames to connect
+    if (dbConfig.host.includes('rds.amazonaws.com') && dbConfig.host !== 'cluster-cyz8jtynkntm') {
+      console.log('🔍 [DB] Valid RDS hostname detected, proceeding with connection');
     }
     
     console.log('🔍 [DB] Creating database connection pool...');
@@ -98,16 +129,35 @@ function getPool() {
       ssl: !!dbConfig.ssl
     });
     
-    pool = mysql.createPool(dbConfig);
-    
-    // Handle pool errors
-    pool.on('error', (err: any) => {
-      console.error('❌ [DB] Database pool error:', err);
-      if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-        console.log('🔍 [DB] Database connection lost, recreating pool...');
-        pool = null;
-      }
-    });
+    try {
+      pool = mysql.createPool(dbConfig);
+      
+      // Handle pool errors
+      pool.on('error', (err: any) => {
+        console.error('❌ [DB] Database pool error:', err);
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+          console.log('🔍 [DB] Database connection lost, recreating pool...');
+          pool = null;
+        }
+      });
+      
+      console.log('✅ [DB] Database pool created successfully');
+      
+      // Test the connection immediately
+      pool.getConnection((err: any, connection: any) => {
+        if (err) {
+          console.error('❌ [DB] Failed to get test connection:', err);
+          pool = null;
+        } else {
+          console.log('✅ [DB] Test connection successful');
+          connection.release();
+        }
+      });
+      
+    } catch (error) {
+      console.error('❌ [DB] Failed to create database pool:', error);
+      return null;
+    }
   }
   
   console.log('🔍 [DB] Pool status:', {
