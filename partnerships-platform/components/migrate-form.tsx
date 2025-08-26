@@ -99,7 +99,6 @@ export function MigrateForm() {
                   <Input
                     id="firstName"
                     type="text"
-                    placeholder="Joe"
                     value={formData.firstName}
                     onChange={(e) => handleInputChange('firstName', e.target.value)}
                     required
@@ -117,7 +116,6 @@ export function MigrateForm() {
                   <Input
                     id="lastName"
                     type="text"
-                    placeholder="Doe"
                     value={formData.lastName}
                     onChange={(e) => handleInputChange('lastName', e.target.value)}
                     required
@@ -135,7 +133,6 @@ export function MigrateForm() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="janedoe@email.com"
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     required
@@ -151,7 +148,6 @@ export function MigrateForm() {
                   <Input
                     id="mobile"
                     type="tel"
-                    placeholder={t.mobilePlaceholder}
                     value={formData.mobile}
                     onChange={(e) => handleInputChange('mobile', e.target.value)}
                     required
@@ -167,7 +163,6 @@ export function MigrateForm() {
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Example@123"
                     value={formData.password}
                     onChange={(e) => handleInputChange('password', e.target.value)}
                     required

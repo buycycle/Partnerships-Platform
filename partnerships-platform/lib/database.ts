@@ -107,15 +107,8 @@ function getPool() {
   if (!pool && mysql) {
     console.log('🔍 [DB] Creating new database pool...');
     
-    // Only skip if it's the specific invalid development hostname
-    if (dbConfig.host === 'cluster-cyz8jtynkntm' && !process.env.FORCE_DB_CONNECTION) {
-      console.log('🔍 [DB] Skipping database connection - invalid development hostname detected');
-      console.log('🔍 [DB] Use FORCE_DB_CONNECTION=true to override this check');
-      return null;
-    }
-    
     // Allow all valid RDS hostnames to connect
-    if (dbConfig.host.includes('rds.amazonaws.com') && dbConfig.host !== 'cluster-cyz8jtynkntm') {
+    if (dbConfig.host.includes('rds.amazonaws.com')) {
       console.log('🔍 [DB] Valid RDS hostname detected, proceeding with connection');
     }
     
@@ -143,10 +136,20 @@ function getPool() {
       
       console.log('✅ [DB] Database pool created successfully');
       
-      // Test the connection immediately
+      // Test the connection immediately with detailed error logging
       pool.getConnection((err: any, connection: any) => {
         if (err) {
           console.error('❌ [DB] Failed to get test connection:', err);
+          console.error('❌ [DB] Connection error details:', {
+            code: err.code,
+            errno: err.errno,
+            sqlState: err.sqlState,
+            message: err.message,
+            host: dbConfig.host,
+            port: dbConfig.port,
+            user: dbConfig.user,
+            database: dbConfig.database
+          });
           pool = null;
         } else {
           console.log('✅ [DB] Test connection successful');
@@ -186,8 +189,9 @@ export async function executeQuery(query: string, params: any[] = [], retries: n
         console.log('❌ [DB] Returning empty array due to missing connection');
         return [];
     }
-      
-      console.log(`🔍 [DB] Database query attempt ${attempt + 1}:`, query.substring(0, 100) + '...');
+    
+    console.log(`🔍 [DB] Database query attempt ${attempt + 1}:`, query.substring(0, 100) + '...');
+    console.log(`🔍 [DB] Using connection pool:`, !!connection);
       
       // Execute query with parameters
     const [rows] = await connection.execute(query, params);

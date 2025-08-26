@@ -21,7 +21,7 @@ export function AppDownloadBanner() {
             <div className="flex flex-col sm:flex-row gap-4">
               {/* Google Play Store */}
               <a 
-                href="https://play.google.com/store/apps/details?id=com.buycycle" 
+                href="https://play.google.com/store/apps/details?id=com.buycycle.mobile&hl" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-block transition-transform hover:scale-105"
@@ -39,7 +39,7 @@ export function AppDownloadBanner() {
 
               {/* Apple App Store */}
               <a 
-                href="https://apps.apple.com/app/buycycle/id1234567890" 
+                href="https://apps.apple.com/app/buycycle-buy-sell-bikes/id1667465257" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-block transition-transform hover:scale-105"

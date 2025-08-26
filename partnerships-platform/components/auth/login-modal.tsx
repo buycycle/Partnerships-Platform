@@ -177,7 +177,6 @@ export function LoginModal({ isOpen, onClose, onLoginSuccess, onCreateAccount }:
                   <Input
                     id="firstName"
                     type="text"
-                    placeholder={t.firstName}
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     required
@@ -190,7 +189,6 @@ export function LoginModal({ isOpen, onClose, onLoginSuccess, onCreateAccount }:
                   <Input
                     id="lastName"
                     type="text"
-                    placeholder={t.lastName}
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     required
@@ -203,7 +201,6 @@ export function LoginModal({ isOpen, onClose, onLoginSuccess, onCreateAccount }:
                   <Input
                     id="phoneNumber"
                     type="tel"
-                    placeholder={t.phoneNumber}
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     required
@@ -218,7 +215,6 @@ export function LoginModal({ isOpen, onClose, onLoginSuccess, onCreateAccount }:
               <Input
                 id="email"
                 type="email"
-                placeholder={t.email}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -231,7 +227,6 @@ export function LoginModal({ isOpen, onClose, onLoginSuccess, onCreateAccount }:
               <Input
                 id="password"
                 type="password"
-                placeholder={t.password}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required

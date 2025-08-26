@@ -23,10 +23,8 @@ export interface Translations {
   lastName: string;
   emailLabel: string;
   mobileLabel: string;
-  mobilePlaceholder: string;
   passwordLabel: string;
   notesLabel: string;
-  notesPlaceholder: string;
   migrateButton: string;
   alreadyHaveAccount: string;
   
@@ -123,10 +121,8 @@ const translations: Record<Language, Translations> = {
     lastName: 'Last name',
     emailLabel: 'Email',
     mobileLabel: 'Mobile',
-    mobilePlaceholder: 'Mobile Number',
     passwordLabel: 'Password',
     notesLabel: 'Notes (Optional)',
-    notesPlaceholder: 'Any additional information or special requests...',
     migrateButton: 'Sign Up',
     alreadyHaveAccount: 'Already have an account? Use the login option in the header.',
     
@@ -223,10 +219,8 @@ const translations: Record<Language, Translations> = {
     lastName: 'Nom',
     emailLabel: 'Email',
     mobileLabel: 'Numéro de téléphone',
-    mobilePlaceholder: 'Numéro de bla bla',
     passwordLabel: 'Mot de passe',
     notesLabel: 'Notes (Optionnel)',
-    notesPlaceholder: 'Informations supplémentaires ou demandes spéciales...',
     migrateButton: 'S\'inscrire sur buycycle',
     alreadyHaveAccount: 'Avez-vous déjà un compte buycycle ? Dirigez-vous vers la connexion en haut de cette page.',
     
