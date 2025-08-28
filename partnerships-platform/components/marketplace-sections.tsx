@@ -4,7 +4,24 @@ import { useLanguage } from '@/contexts/language-context';
 import { MigrateForm } from './migrate-form';
 
 export function MarketplaceSections() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  
+  // Define banner images based on language
+  const bannerImages = {
+    en: {
+      sportEquipment: "/assets_78537f9f53b44e1aa1ec3c464489249a_7899abac101448f0ab45217fcb076834.png",
+      bike: "/assets_78537f9f53b44e1aa1ec3c464489249a_3f94db9e046848cdbf1cd1d3371522a1.png",
+      partsAccessories: "/assets_78537f9f53b44e1aa1ec3c464489249a_9f67366d952d4cb0b5593045f16e9cae.png"
+    },
+    fr: {
+      sportEquipment: "/french-banners/Frame 38633.png",
+      bike: "/french-banners/Frame 38635.png", 
+      partsAccessories: "/french-banners/Frame 38636.png"
+    }
+  };
+
+  const currentBanners = bannerImages[language] || bannerImages.en;
+
   return (
     <div className="bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,7 +42,7 @@ export function MarketplaceSections() {
             className="block rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
           >
             <img 
-              src="/assets_78537f9f53b44e1aa1ec3c464489249a_7899abac101448f0ab45217fcb076834.png"
+              src={currentBanners.sportEquipment}
               alt="Sell your sport equipment"
               className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
             />
@@ -39,7 +56,7 @@ export function MarketplaceSections() {
             className="block rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
           >
             <img 
-              src="/assets_78537f9f53b44e1aa1ec3c464489249a_3f94db9e046848cdbf1cd1d3371522a1.png"
+              src={currentBanners.bike}
               alt="Sell your bike"
               className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
             />
@@ -53,7 +70,7 @@ export function MarketplaceSections() {
             className="block rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
           >
             <img 
-              src="/assets_78537f9f53b44e1aa1ec3c464489249a_9f67366d952d4cb0b5593045f16e9cae.png"
+              src={currentBanners.partsAccessories}
               alt="Sell your parts & accessories"
               className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
             />
